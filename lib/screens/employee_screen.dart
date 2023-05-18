@@ -9,7 +9,6 @@ import 'package:flutter_parse/screens/login_screen.dart';
 import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/colors.dart';
 import 'package:flutter_parse/utils/dimens.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EmployeeScreen extends StatefulWidget {
@@ -103,7 +102,21 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                       icon: Icon(Icons.logout))
                 ],
               ),
-              body: newMethod(employeeProvider),
+              body: Column(
+                // clipBehavior: Clip.none,
+                children: [
+                  Expanded(
+                    flex: 9,
+                    child: employeeListView(employeeProvider)),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      // height: 50,
+                      color: Colors.transparent,
+                    ),
+                  )
+                ],
+              ),
               floatingActionButton: FloatingActionButton.extended(
                 label: Text('Add Employee'),
                 icon: Icon(Icons.person_add),
@@ -117,8 +130,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   });
                 },
               ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
+              // floatingActionButtonLocation:
+              //     FloatingActionButtonLocation.centerFloat,
             );
           }),
     );
@@ -190,7 +203,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     });
   }
 
-  FutureBuilder<List<employeeModel>> newMethod(
+  FutureBuilder<List<employeeModel>> employeeListView(
       EmployeeProvider employeeProvider) {
     return FutureBuilder<List<employeeModel>>(
       future: employeeListMethod(),

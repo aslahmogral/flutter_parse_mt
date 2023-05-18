@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_parse/null/home_screen.dart';
 import 'package:flutter_parse/provider/auth_provider.dart';
 import 'package:flutter_parse/provider/employee_provider.dart';
 import 'package:flutter_parse/screens/login_screen.dart';
 import 'package:flutter_parse/services/service_helper.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -33,8 +33,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter SignUp',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: const Color(0xff9170e2),
+          ),
         ),
         home: LoginScreen(),
       ),

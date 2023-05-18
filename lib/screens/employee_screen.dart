@@ -9,6 +9,7 @@ import 'package:flutter_parse/screens/login_screen.dart';
 import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/colors.dart';
 import 'package:flutter_parse/utils/dimens.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EmployeeScreen extends StatefulWidget {
@@ -47,120 +48,134 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           valueListenable: isLoadingNotifier,
           builder: (context, isLoading, child) {
             return Scaffold(
-                    backgroundColor: Colors.transparent,
-                    resizeToAvoidBottomInset: true,
-                    appBar: AppBar(
-                      elevation: 0.0,
-                      backgroundColor: Colors.transparent,
-                      title: Text('Employee Details'),
-                      centerTitle: true,
-                      actions: [
-                        IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  backgroundColor: Colors.transparent,
-                                  content:ValueListenableBuilder(
-                                    valueListenable: isSignOutLoadingNotifier,
-                                    builder: (context,isSignout, child) {
-                                      return  Container(
-                                        decoration: FTheme.dialogDecoration,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(22.0),
-                                          child:isSignout ? Container(
-                                            height: 300,
-                                            child: LoaderBird(message1: 'Signing Out.....',)) : Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text('Are You Sure '),
-                                              Text('You Want to Signout'),
-                                              SizedBox(
-                                                height: 16,
-                                              ),
-                                              FButton(
-                                                label: 'Sign Out',
-                                                gradient: true,
-                                                onPressed: () {
-                                                  logoutMethod(
-                                                      authProvider, context);
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  ),
-                                ),
-                              );
-                              // logoutMethod(authProvider, context);
-                            },
-                            icon: Icon(Icons.logout))
-                      ],
-                    ),
-                    body: newMethod(employeeProvider),
-                    floatingActionButton: FloatingActionButton.large(
-                      backgroundColor: Colors.black,
+              backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.transparent,
+                title: Text('Employee Details'),
+                centerTitle: true,
+                actions: [
+                  IconButton(
                       onPressed: () {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
                             backgroundColor: Colors.transparent,
-                            content: Container(
-                              decoration: FTheme.dialogDecoration,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.all(Dimens.padding_xxl),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text('Enter Employee Details',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(
-                                      height: Dimens.padding_xxl,
+                            content: ValueListenableBuilder(
+                                valueListenable: isSignOutLoadingNotifier,
+                                builder: (context, isSignout, child) {
+                                  return Container(
+                                    decoration: FTheme.dialogDecoration,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(22.0),
+                                      child: isSignout
+                                          ? Container(
+                                              height: 300,
+                                              child: LoaderBird(
+                                                message1: 'Signing Out.....',
+                                              ))
+                                          : Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text('Are You Sure '),
+                                                Text('You Want to Signout'),
+                                                SizedBox(
+                                                  height: 16,
+                                                ),
+                                                FButton(
+                                                  label: 'Sign Out',
+                                                  gradient: true,
+                                                  onPressed: () {
+                                                    logoutMethod(
+                                                        authProvider, context);
+                                                  },
+                                                )
+                                              ],
+                                            ),
                                     ),
-                                    WTextFormField(
-                                      label: 'Enter Name',
-                                      textEditingController: nameController,
-                                    ),
-                                    SizedBox(
-                                      height: Dimens.padding,
-                                    ),
-                                    WTextFormField(
-                                      label: 'Enter Age',
-                                      textEditingController: ageController,
-                                    ),
-                                    SizedBox(
-                                      height: Dimens.padding,
-                                    ),
-                                    WTextFormField(
-                                      label: 'Enter Rating',
-                                      textEditingController: ratingController,
-                                    ),
-                                    SizedBox(
-                                      height: Dimens.padding,
-                                    ),
-                                    FButton(
-                                      onPressed: () {
-                                        saveEmployeeMethod(
-                                            employeeProvider, context);
-                                      },
-                                      label: 'Save',
-                                      gradient: true,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  );
+                                }),
                           ),
                         );
+                        // logoutMethod(authProvider, context);
                       },
-                      child: Icon(Icons.person_add),
-                    ),
-                  );
+                      icon: Icon(Icons.logout))
+                ],
+              ),
+              body: newMethod(employeeProvider),
+              floatingActionButton: FloatingActionButton.extended(
+                label: Text('Add Employee'),
+                icon: Icon(Icons.person_add),
+                backgroundColor: Colors.black,
+                onPressed: () {
+                  alertDialog(context, employeeProvider, () {
+                    saveEmployeeMethod(employeeProvider, context);
+                    nameController.clear();
+                    ageController.clear();
+                    ratingController.clear();
+                  });
+                },
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+            );
           }),
+    );
+  }
+
+  Future<dynamic> alertDialog(BuildContext context,
+      EmployeeProvider employeeProvider, void Function()? onPressed) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        content: Container(
+          decoration: FTheme.dialogDecoration,
+          child: Padding(
+            padding: const EdgeInsets.all(Dimens.padding_xxl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Enter Employee Details',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: Dimens.padding_xxl,
+                ),
+                WTextFormField(
+                  label: 'Enter Name',
+                  textEditingController: nameController,
+                ),
+                SizedBox(
+                  height: Dimens.padding,
+                ),
+                WTextFormField(
+                  label: 'Enter Age',
+                  textEditingController: ageController,
+                ),
+                SizedBox(
+                  height: Dimens.padding,
+                ),
+                WTextFormField(
+                  label: 'Enter Rating',
+                  textEditingController: ratingController,
+                ),
+                SizedBox(
+                  height: Dimens.padding,
+                ),
+                FButton(
+                  onPressed: onPressed,
+                  //  () {
+                  //   // saveEmployeeMethod(employeeProvider, context);
+                  // },
+                  label: 'Save',
+                  gradient: true,
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -173,8 +188,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     setState(() {
       Navigator.pop(context);
     });
-
-    
   }
 
   FutureBuilder<List<employeeModel>> newMethod(
@@ -220,20 +233,27 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                       elevation: 6,
                       margin: const EdgeInsets.all(10),
                       child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: WColors.primaryColor,
-                          child: Text(
-                            getStringFirstLetter(
-                                employeeName.toString().toUpperCase()),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: WColors.brightColor),
+                          leading: CircleAvatar(
+                            backgroundColor: WColors.primaryColor,
+                            child: Text(
+                              getStringFirstLetter(
+                                  employeeName.toString().toUpperCase()),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: WColors.brightColor),
+                            ),
                           ),
-                        ),
-                        title: Text(employeeName!),
-                        subtitle: Text(employeeRating.toString()),
-                        trailing: const Icon(Icons.delete),
-                      ),
+                          title: Text(employeeName!),
+                          subtitle: Text(employeeRating.toString()),
+                          trailing: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  employeeProvider.deleteEmployee(
+                                      id: employeeId.toString());
+                                });
+                                // print(employeeId);
+                              },
+                              icon: Icon(Icons.delete))),
                     ),
                   );
                 },
@@ -253,14 +273,12 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   }
 
   Future<void> logoutMethod(
-    
       AuthProvider authProvider, BuildContext context) async {
-        
     isSignOutLoadingNotifier.value = true;
 
     await authProvider.userLogout();
     if (authProvider.isLoggedIn == false) {
-    isSignOutLoadingNotifier.value = false;
+      isSignOutLoadingNotifier.value = false;
 
       Navigator.push(
           context,
@@ -269,4 +287,13 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           ));
     }
   }
+
+  // Future<void> updateTodo(String id, bool done) async {
+  //   var todo = ParseObject('Todo')
+  //     ..objectId = id
+  //     ..set('name', nameController)
+  //     ..set('rating', int.parse(ratingController.text))
+  //     ..set('age', int.parse(ageController.text));
+  //   await todo.save();
+  // }
 }

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_parse/model/employee_model.dart';
 import 'package:flutter_parse/services/employee_services.dart';
 
-class EmployeeProvider with ChangeNotifier{
+class EmployeeProvider with ChangeNotifier {
   List<employeeModel> _employeeList = [];
   List<employeeModel> get employeeList => _employeeList;
-
 
   getEmployee() async {
     print('aslah : provider : getemployee');
@@ -39,5 +38,9 @@ class EmployeeProvider with ChangeNotifier{
       required String rating}) async {
     print('aslah : provider : getemployee');
     await EmployeeServices().saveEmployee(name: name, age: age, rating: rating);
+  }
+
+  deleteEmployee({required String id}) async {
+    await EmployeeServices().deleteEmployee(id: id);
   }
 }

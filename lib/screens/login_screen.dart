@@ -10,6 +10,7 @@ import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/constants.dart';
 import 'package:flutter_parse/utils/dimens.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -124,4 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
           (route) => false);
     }
   }
+
+
 }

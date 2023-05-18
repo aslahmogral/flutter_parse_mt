@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 class LoaderBird extends StatelessWidget {
   final String? message1;
   final String? message2;
-  const LoaderBird({super.key, this.message1, this.message2});
+  const LoaderBird({super.key, this.message1 = '', this.message2 = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,8 @@ class LoaderBird extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              Text(message1!.isEmpty ? '' : message1.toString()),
-              Text(message2!.isEmpty ? '' : message2.toString())
+              Text(message1.toString()),
+              Text(message2.toString())
             ],
           ),
         ),

@@ -40,7 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
           valueListenable: isLoadingNotifier,
           builder: (context, bool isLoading, child) {
             return isLoading
-                ? LoaderBird(message1: 'plzzz wait.....',message2: 'Logging.... in....',)
+                ? LoaderBird(
+                    message1: 'plzzz wait.....',
+                    message2: 'Logging.... in....',
+                  )
                 : Scaffold(
                     backgroundColor: Colors.transparent,
                     resizeToAvoidBottomInset: true,
@@ -84,18 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   SizedBox(
                                     height: Dimens.padding_xxl,
                                   ),
-                                  RatingBar(
-                                      minRating: 1,
-                                      maxRating: 100,
-                                      ratingWidget: RatingWidget(
-                                          full: Icon(Icons.alarm),
-                                          half: Icon(Icons.alarm),
-                                          empty: Icon(Icons.alarm)),
-                                      onRatingUpdate: (rating) {
-                                        rating =100;
-                                        print(rating);
-                                      }),
-                                  WButton(
+                                  FButton(
                                     label: Constants.login,
                                     gradient: true,
                                     onPressed: () =>
@@ -126,11 +118,10 @@ class _LoginScreenState extends State<LoginScreen> {
       print('/////////////////////employeescreen');
       isLoadingNotifier.value = false;
 
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(
-            builder: (context) => EmployeeScreen(),
-          ));
+          MaterialPageRoute(builder: (context) => EmployeeScreen()),
+          (route) => false);
     }
   }
 }

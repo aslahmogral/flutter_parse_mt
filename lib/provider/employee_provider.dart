@@ -21,6 +21,7 @@ class EmployeeProvider with ChangeNotifier{
         return employeeModel(
           name: item['name'] as String?,
           rating: item['rating'] as int?,
+          objectId: item['objectId'] as String?,
           age: item['age'] as int?,
         );
       }).toList();

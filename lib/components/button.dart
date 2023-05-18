@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/colors.dart';
 
-class WButton extends StatefulWidget {
+class FButton extends StatefulWidget {
   final void Function()? onPressed;
   final String label;
   final Color? buttonColor;
   final Color? textColor;
   final bool gradient;
-  const WButton(
+  const FButton(
       {super.key,
       this.onPressed,
       required this.label,
@@ -17,10 +17,10 @@ class WButton extends StatefulWidget {
       required this.gradient});
 
   @override
-  State<WButton> createState() => W_ButtonState();
+  State<FButton> createState() => W_ButtonState();
 }
 
-class W_ButtonState extends State<WButton> {
+class W_ButtonState extends State<FButton> {
   var offsetBoxShadow = [
     BoxShadow(
       offset: Offset(-8.0, -8.0),

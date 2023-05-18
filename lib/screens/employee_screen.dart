@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_parse/components/loader.dart';
 import 'package:flutter_parse/model/employee_model.dart';
 import 'package:flutter_parse/provider/auth_provider.dart';
 import 'package:flutter_parse/provider/employee_provider.dart';
@@ -52,9 +53,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
             case ConnectionState.waiting:
               return Center(
                 child: Container(
-                    width: 100,
-                    height: 100,
-                    child: CircularProgressIndicator()),
+                    
+                    child: LoaderBird(message1: 'loading data.....',message2: '',)),
               );
 
             default:

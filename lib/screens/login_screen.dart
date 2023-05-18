@@ -9,6 +9,7 @@ import 'package:flutter_parse/screens/employee_screen.dart';
 import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/constants.dart';
 import 'package:flutter_parse/utils/dimens.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -39,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
           valueListenable: isLoadingNotifier,
           builder: (context, bool isLoading, child) {
             return isLoading
-                ? LoaderBird()
+                ? LoaderBird(message1: 'plzzz wait.....',message2: 'Logging.... in....',)
                 : Scaffold(
                     backgroundColor: Colors.transparent,
                     resizeToAvoidBottomInset: true,
@@ -83,6 +84,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   SizedBox(
                                     height: Dimens.padding_xxl,
                                   ),
+                                  RatingBar(
+                                      minRating: 1,
+                                      maxRating: 100,
+                                      ratingWidget: RatingWidget(
+                                          full: Icon(Icons.alarm),
+                                          half: Icon(Icons.alarm),
+                                          empty: Icon(Icons.alarm)),
+                                      onRatingUpdate: (rating) {
+                                        rating =100;
+                                        print(rating);
+                                      }),
                                   WButton(
                                     label: Constants.login,
                                     gradient: true,

@@ -75,6 +75,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     height: Dimens.padding_xxl,
                                   ),
                                   WTextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'enter user name';
+                                      }
+                                      return null;
+
+                                    },
                                     textEditingController: _userNameController,
                                     label: Constants.enter_username,
                                   ),
@@ -82,6 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     height: Dimens.padding_xxl,
                                   ),
                                   WTextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'enter user password';
+                                      }
+                                      return null;
+                                    },
                                     textEditingController: _passwordController,
                                     obscureText: true,
                                     label: Constants.enter_password,
@@ -130,24 +143,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> loginMethod(
       AuthProvider authProvider, BuildContext context) async {
-    isLoadingNotifier.value = true;
+    bool isValidated = _formKey.currentState!.validate();
+    if (isValidated) {
+      isLoadingNotifier.value = true;
 
-    final response = await authProvider.userLogin(
-        adminName: _userNameController.text.trim(),
-        adminPassword: _passwordController.text.trim());
+      final response = await authProvider.userLogin(
+          adminName: _userNameController.text.trim(),
+          adminPassword: _passwordController.text.trim());
 
-    bool? isloggedIn = await authProvider.isLoggedIn;
-    if (isloggedIn!) {
-      print('/////////////////////employeescreen');
-      isLoadingNotifier.value = false;
+      bool? isloggedIn = await authProvider.isLoggedIn;
+      if (isloggedIn!) {
+        print('/////////////////////employeescreen');
+        isLoadingNotifier.value = false;
 
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => EmployeeScreen()),
-          (route) => false);
-    } else {
-      showError(response.error.toString());
-      isLoadingNotifier.value = false;
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => EmployeeScreen()),
+            (route) => false);
+      } else {
+        showError(response.error.toString());
+        isLoadingNotifier.value = false;
+      }
     }
   }
 }

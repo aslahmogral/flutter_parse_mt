@@ -6,18 +6,24 @@ class AuthServices {
       {required String adminName, required String adminPassword}) async {
     print('----------------userlogin services-----------');
 
-    final user = ParseUser(adminName, adminPassword, null);
+    try {
+      final user = ParseUser(adminName, adminPassword, null);
 
-    var response = await user.login();
+      var response = await user.login();
 
-    if (response.success) {
-      print('---------------employee services : userlogin : success');
-      print('[[[[[[[[[[[[[[[[[[[[$response]]]]]]]]]]]]]]]]]]]]');
-      return FResponse.success(data: response);
-    } else {
-      print('---------------employee services : userlogin : faile');
+      if (response.success) {
+        print('---------------employee services : userlogin : success');
+        print('[[[[[[[[[[[[[[[[[[[[$response]]]]]]]]]]]]]]]]]]]]');
+        return FResponse.success(data: response);
+      } else {
+        print('---------------employee services : userlogin : faile');
 
-      return FResponse.error();
+        return FResponse.error(error: response.error!.message);
+      }
+    } catch (e) {
+      print('[[[[[[[[[[[[[[[[[$e]]]]]]]]]]]]]]]]]');
+      print(e);
+      return FResponse.error(error: e.toString());
     }
   }
 

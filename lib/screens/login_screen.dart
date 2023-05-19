@@ -10,6 +10,7 @@ import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/constants.dart';
 import 'package:flutter_parse/utils/dimens.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:http/http.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -107,13 +108,34 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void showError(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error!"),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            new TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> loginMethod(
       AuthProvider authProvider, BuildContext context) async {
     isLoadingNotifier.value = true;
 
-    await authProvider.userLogin(
+    final response = await authProvider.userLogin(
         adminName: _userNameController.text.trim(),
         adminPassword: _passwordController.text.trim());
+
     bool? isloggedIn = await authProvider.isLoggedIn;
     if (isloggedIn!) {
       print('/////////////////////employeescreen');
@@ -123,8 +145,9 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(builder: (context) => EmployeeScreen()),
           (route) => false);
+    } else {
+      showError(response.error.toString());
+      isLoadingNotifier.value = false;
     }
   }
-
-
 }

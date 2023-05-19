@@ -105,14 +105,13 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
               body: Column(
                 // clipBehavior: Clip.none,
                 children: [
-                  Expanded(
-                    flex: 9,
-                    child: employeeListView(employeeProvider)),
+                  Expanded(flex: 9, child: employeeListView(employeeProvider)),
                   Expanded(
                     flex: 1,
                     child: Container(
                       // height: 50,
-                      color: Colors.transparent,
+                      color:
+                          isLoading ? WColors.brightColor : Colors.transparent,
                     ),
                   )
                 ],
@@ -163,6 +162,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   height: Dimens.padding,
                 ),
                 WTextFormField(
+                  textInputType: TextInputType.number,
                   label: 'Enter Age',
                   textEditingController: ageController,
                 ),
@@ -170,6 +170,12 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                   height: Dimens.padding,
                 ),
                 WTextFormField(
+                  validator: (value) {
+                    if (int.parse(value!) > 100) {
+                      print('hi');
+                    }
+                  },
+                  textInputType: TextInputType.number,
                   label: 'Enter Rating',
                   textEditingController: ratingController,
                 ),
@@ -300,13 +306,4 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           ));
     }
   }
-
-  // Future<void> updateTodo(String id, bool done) async {
-  //   var todo = ParseObject('Todo')
-  //     ..objectId = id
-  //     ..set('name', nameController)
-  //     ..set('rating', int.parse(ratingController.text))
-  //     ..set('age', int.parse(ageController.text));
-  //   await todo.save();
-  // }
 }

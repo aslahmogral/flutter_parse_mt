@@ -9,9 +9,6 @@ import 'package:flutter_parse/screens/employee_screen.dart';
 import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/constants.dart';
 import 'package:flutter_parse/utils/dimens.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:http/http.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -41,12 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: ValueListenableBuilder(
           valueListenable: isLoadingNotifier,
           builder: (context, bool isLoading, child) {
-            return isLoading
-                ? LoaderBird(
-                    message1: 'plzzz wait.....',
-                    message2: 'Logging.... in....',
-                  )
-                : Scaffold(
+            return Scaffold(
                     backgroundColor: Colors.transparent,
                     resizeToAvoidBottomInset: true,
                     appBar: AppBar(
@@ -72,26 +64,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style: FTheme.primaryHeaderStyle,
                                   ),
                                   SizedBox(
-                                    height: Dimens.padding_xxl,
+                                    height: Dimens.padding_3xl,
                                   ),
                                   WTextFormField(
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        return 'enter user name';
+                                        return Constants.username_empty;
                                       }
                                       return null;
-
                                     },
                                     textEditingController: _userNameController,
                                     label: Constants.enter_username,
                                   ),
                                   SizedBox(
-                                    height: Dimens.padding_xxl,
+                                    height: Dimens.padding_3xl,
                                   ),
                                   WTextFormField(
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        return 'enter user password';
+                                        return Constants.password_empty;
                                       }
                                       return null;
                                     },
@@ -100,9 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     label: Constants.enter_password,
                                   ),
                                   SizedBox(
-                                    height: Dimens.padding_xxl,
+                                    height: Dimens.padding_3xl,
                                   ),
-                                  FButton(
+                                  isLoading ? CircularProgressIndicator() : FButton(
                                     label: Constants.login,
                                     gradient: true,
                                     onPressed: () =>

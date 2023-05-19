@@ -9,16 +9,13 @@ class EmployeeServices {
     final ParseResponse apiResponse = await queryEmployee.query();
     try {
       if (apiResponse.success && apiResponse.results != null) {
-        print('*************************1');
         return FResponse.success(
             data: apiResponse.results as List<ParseObject>);
       } else {
-        print('*************************2');
 
         return FResponse.error();
       }
     } catch (e) {
-      print('*************************3');
 
       print(e);
       return FResponse.error();
@@ -38,7 +35,6 @@ class EmployeeServices {
       await employee.save();
       return FResponse.success(success: true);
     } catch (e) {
-      print('*************************3');
 
       print(e);
       return FResponse.error();

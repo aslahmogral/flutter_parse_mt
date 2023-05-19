@@ -9,6 +9,7 @@ import 'package:flutter_parse/screens/login_screen.dart';
 import 'package:flutter_parse/utils/apptheme.dart';
 import 'package:flutter_parse/utils/colors.dart';
 import 'package:flutter_parse/utils/dimens.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class EmployeeScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   final ratingController = TextEditingController();
   ValueNotifier<bool> isLoadingNotifier = ValueNotifier(false);
   ValueNotifier<bool> isSignOutLoadingNotifier = ValueNotifier(false);
+  final _formKey = GlobalKey<FormState>();
 
   Future<List<employeeModel>> employeeListMethod() async {
     List<employeeModel> employeeList = [];
@@ -121,11 +123,9 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                 icon: Icon(Icons.person_add),
                 backgroundColor: Colors.black,
                 onPressed: () {
-                  alertDialog(context, employeeProvider, () {
-                    saveEmployeeMethod(employeeProvider, context);
-                    nameController.clear();
-                    ageController.clear();
-                    ratingController.clear();
+                  addEmployeeDialog(context, employeeProvider, () {
+                    saveEmployeeMethod(employeeProvider, context,
+                        _formKey.currentState!.validate());
                   });
                 },
               ),
@@ -136,7 +136,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     );
   }
 
-  Future<dynamic> alertDialog(BuildContext context,
+  Future<dynamic> addEmployeeDialog(BuildContext context,
       EmployeeProvider employeeProvider, void Function()? onPressed) {
     return showDialog(
       context: context,
@@ -146,51 +146,66 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           decoration: FTheme.dialogDecoration,
           child: Padding(
             padding: const EdgeInsets.all(Dimens.padding_xxl),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Enter Employee Details',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(
-                  height: Dimens.padding_xxl,
-                ),
-                WTextFormField(
-                  label: 'Enter Name',
-                  textEditingController: nameController,
-                ),
-                SizedBox(
-                  height: Dimens.padding,
-                ),
-                WTextFormField(
-                  textInputType: TextInputType.number,
-                  label: 'Enter Age',
-                  textEditingController: ageController,
-                ),
-                SizedBox(
-                  height: Dimens.padding,
-                ),
-                WTextFormField(
-                  validator: (value) {
-                    if (int.parse(value!) > 100) {
-                      print('hi');
-                    }
-                  },
-                  textInputType: TextInputType.number,
-                  label: 'Enter Rating',
-                  textEditingController: ratingController,
-                ),
-                SizedBox(
-                  height: Dimens.padding,
-                ),
-                FButton(
-                  onPressed: onPressed,
-                  //  () {
-                  //   // saveEmployeeMethod(employeeProvider, context);
-                  // },
-                  label: 'Save',
-                  gradient: true,
-                )
-              ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Enter Employee Details',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: Dimens.padding_xxl,
+                  ),
+                  WTextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'enter user name';
+                      }
+                      return null;
+                    },
+                    label: 'Enter Name',
+                    textEditingController: nameController,
+                  ),
+                  SizedBox(
+                    height: Dimens.padding,
+                  ),
+                  WTextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'enter user name';
+                      }
+                      return null;
+                    },
+                    textInputType: TextInputType.number,
+                    label: 'Enter Age',
+                    textEditingController: ageController,
+                  ),
+                  SizedBox(
+                    height: Dimens.padding,
+                  ),
+                  WTextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'enter user name';
+                      } else if (int.parse(value) > 100) {
+                        return 'rating should be less than 100';
+                      }
+                      return null;
+                    },
+                    textInputType: TextInputType.number,
+                    label: 'Enter Rating',
+                    textEditingController: ratingController,
+                  ),
+                  SizedBox(
+                    height: Dimens.padding,
+                  ),
+                  FButton(
+                    onPressed: onPressed,
+                    label: 'Save',
+                    gradient: true,
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -198,15 +213,20 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     );
   }
 
-  Future<void> saveEmployeeMethod(
-      EmployeeProvider employeeProvider, BuildContext context) async {
-    await employeeProvider.saveEmployee(
-        name: nameController.text,
-        age: ageController.text,
-        rating: ratingController.text);
-    setState(() {
-      Navigator.pop(context);
-    });
+  Future<void> saveEmployeeMethod(EmployeeProvider employeeProvider,
+      BuildContext context, bool isValidated) async {
+    if (isValidated) {
+      await employeeProvider.saveEmployee(
+          name: nameController.text,
+          age: ageController.text,
+          rating: ratingController.text);
+      nameController.clear();
+      ageController.clear();
+      ratingController.clear();
+      setState(() {
+        Navigator.pop(context);
+      });
+    }
   }
 
   FutureBuilder<List<employeeModel>> employeeListView(
@@ -251,28 +271,30 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                           borderRadius: BorderRadius.circular(20)),
                       elevation: 6,
                       margin: const EdgeInsets.all(10),
-                      child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: WColors.primaryColor,
-                            child: Text(
-                              getStringFirstLetter(
-                                  employeeName.toString().toUpperCase()),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: WColors.brightColor),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                            leading: CircularPercentIndicator(
+                              percent: employeeRating! / 100,
+                              radius: 28,
+                              progressColor: progressColor(employeeRating),
+                              center: Text(
+                                '${employeeRating}%',
+                                style: TextStyle(fontSize: 12),
+                              ),
                             ),
-                          ),
-                          title: Text(employeeName!),
-                          subtitle: Text(employeeRating.toString()),
-                          trailing: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  employeeProvider.deleteEmployee(
-                                      id: employeeId.toString());
-                                });
-                                // print(employeeId);
-                              },
-                              icon: Icon(Icons.delete))),
+                            title: Text(employeeName!),
+                            // subtitle: Text(employeeRating.toString()),
+                            trailing: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    employeeProvider.deleteEmployee(
+                                        id: employeeId.toString());
+                                  });
+                                  // print(employeeId);
+                                },
+                                icon: Icon(Icons.delete))),
+                      ),
                     ),
                   );
                 },
@@ -281,6 +303,16 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
         }
       },
     );
+  }
+
+  Color progressColor(value) {
+    if (value >= 75) {
+      return Colors.green;
+    } else if (value >= 35 && value < 75) {
+      return Colors.yellow;
+    } else {
+      return Colors.red;
+    }
   }
 
   String getStringFirstLetter(String input) {

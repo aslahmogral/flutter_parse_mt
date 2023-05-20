@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_parse/components/animation_container.dart';
 import 'package:flutter_parse/components/button.dart';
 import 'package:flutter_parse/components/custom_theme.dart';
-import 'package:flutter_parse/components/loader.dart';
 import 'package:flutter_parse/components/textformfield.dart';
 import 'package:flutter_parse/provider/auth_provider.dart';
 import 'package:flutter_parse/screens/employee_screen.dart';
@@ -39,75 +38,76 @@ class _LoginScreenState extends State<LoginScreen> {
           valueListenable: isLoadingNotifier,
           builder: (context, bool isLoading, child) {
             return Scaffold(
-                    backgroundColor: Colors.transparent,
-                    resizeToAvoidBottomInset: true,
-                    appBar: AppBar(
-                      elevation: 0.0,
-                      backgroundColor: Colors.transparent,
-                      // title: Text('login'),
-                    ),
-                    body: GestureDetector(
-                        onTap: () =>
-                            FocusManager.instance.primaryFocus!.unfocus(),
-                        child: CustomTheme(
-                          child1: AnimationContainer(
-                              lottie: 'animation/mobilenumber.json'),
-                          child2: Form(
-                            key: _formKey,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    Constants.enter_username_and_password,
-                                    style: FTheme.primaryHeaderStyle,
-                                  ),
-                                  SizedBox(
-                                    height: Dimens.padding_3xl,
-                                  ),
-                                  WTextFormField(
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return Constants.username_empty;
-                                      }
-                                      return null;
-                                    },
-                                    textEditingController: _userNameController,
-                                    label: Constants.enter_username,
-                                  ),
-                                  SizedBox(
-                                    height: Dimens.padding_3xl,
-                                  ),
-                                  WTextFormField(
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return Constants.password_empty;
-                                      }
-                                      return null;
-                                    },
-                                    textEditingController: _passwordController,
-                                    obscureText: true,
-                                    label: Constants.enter_password,
-                                  ),
-                                  SizedBox(
-                                    height: Dimens.padding_3xl,
-                                  ),
-                                  isLoading ? CircularProgressIndicator() : FButton(
+              backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.transparent,
+                // title: Text('login'),
+              ),
+              body: GestureDetector(
+                  onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+                  child: CustomTheme(
+                    child1: const AnimationContainer(
+                        lottie: 'animation/mobilenumber.json'),
+                    child2: Form(
+                      key: _formKey,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              Constants.enterUserNameAndPassword,
+                              style: FTheme.primaryHeaderStyle,
+                            ),
+                            const SizedBox(
+                              height: Dimens.padding_3xl,
+                            ),
+                            WTextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return Constants.emptyUserName;
+                                }
+                                return null;
+                              },
+                              textEditingController: _userNameController,
+                              label: Constants.enterUserName,
+                            ),
+                            const SizedBox(
+                              height: Dimens.padding_3xl,
+                            ),
+                            WTextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return Constants.emptyPassword;
+                                }
+                                return null;
+                              },
+                              textEditingController: _passwordController,
+                              obscureText: true,
+                              label: Constants.enterPassword,
+                            ),
+                            const SizedBox(
+                              height: Dimens.padding_3xl,
+                            ),
+                            isLoading
+                                ? const CircularProgressIndicator()
+                                : FButton(
                                     label: Constants.login,
                                     gradient: true,
                                     onPressed: () =>
                                         loginMethod(authProvider, context),
                                   ),
-                                  SizedBox(
-                                    height: Dimens.padding,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        )),
-                  );
+                            const SizedBox(
+                              height: Dimens.padding,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
+            );
           }),
     );
   }
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
           title: const Text("Error!"),
           content: Text(errorMessage),
           actions: <Widget>[
-            new TextButton(
+            TextButton(
               child: const Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -142,14 +142,13 @@ class _LoginScreenState extends State<LoginScreen> {
           adminName: _userNameController.text.trim(),
           adminPassword: _passwordController.text.trim());
 
-      bool? isloggedIn = await authProvider.isLoggedIn;
+      bool? isloggedIn = authProvider.isLoggedIn;
       if (isloggedIn!) {
-        print('/////////////////////employeescreen');
         isLoadingNotifier.value = false;
 
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => EmployeeScreen()),
+            MaterialPageRoute(builder: (context) => const EmployeeScreen()),
             (route) => false);
       } else {
         showError(response.error.toString());

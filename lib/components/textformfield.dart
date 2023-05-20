@@ -8,13 +8,15 @@ class WTextFormField extends StatefulWidget {
   final String? hintText;
   final FormFieldValidator<String>? validator;
   final TextInputType? textInputType;
-  final bool obscureText ;
+  final bool obscureText;
   const WTextFormField(
       {super.key,
       this.textEditingController,
       this.label,
       this.hintText,
-      this.textInputType, this.validator, this.obscureText = false});
+      this.textInputType,
+      this.validator,
+      this.obscureText = false});
 
   @override
   State<WTextFormField> createState() => _WTextFormFieldState();
@@ -29,22 +31,20 @@ class _WTextFormFieldState extends State<WTextFormField> {
       validator: widget.validator,
       obscureText: widget.obscureText,
       decoration: InputDecoration(
-        
-        
           fillColor: WColors.brightColor,
           filled: true,
           label: Text(
             widget.label.toString(),
           ),
-          
           hintText: widget.hintText,
           border: OutlineInputBorder(
-            
-              borderRadius: BorderRadius.circular(Dimens.borderRadius_small,),
-              borderSide: BorderSide(color: WColors.primaryColor)),
+              borderRadius: BorderRadius.circular(
+                Dimens.borderRadiusSmall,
+              ),
+              borderSide: const BorderSide(color: WColors.primaryColor)),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimens.borderRadius_small),
-              borderSide: BorderSide(color: WColors.primaryColor))),
+              borderRadius: BorderRadius.circular(Dimens.borderRadiusSmall),
+              borderSide: const BorderSide(color: WColors.primaryColor))),
     );
   }
 }

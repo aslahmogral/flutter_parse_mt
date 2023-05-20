@@ -3,7 +3,7 @@ import 'package:flutter_parse/utils/dimens.dart';
 
 class FTheme {
   static LinearGradient get primaryGradient {
-    return LinearGradient(colors: [
+    return const LinearGradient(colors: [
       Color.fromARGB(255, 141, 106, 230),
       Color.fromARGB(255, 162, 136, 227),
       Color.fromARGB(255, 169, 145, 230),
@@ -13,16 +13,16 @@ class FTheme {
   }
 
   static TextStyle get primaryHeaderStyle {
-    return TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+    return const TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
   }
 
   static TextStyle get primaryHeaderStyle2 {
-    return TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
+    return const TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
   }
 
   static BoxDecoration get dialogDecoration {
     return BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(Dimens.borderRadius_small));
+        borderRadius: BorderRadius.circular(Dimens.borderRadiusSmall));
   }
 }

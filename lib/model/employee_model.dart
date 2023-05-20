@@ -1,4 +1,4 @@
-class employeeModel {
+class EmployeeModel {
   String? className;
   String? objectId;
   String? createdAt;
@@ -7,7 +7,7 @@ class employeeModel {
   int? rating;
   int? age;
 
-  employeeModel(
+  EmployeeModel(
       {this.className,
       this.objectId,
       this.createdAt,
@@ -16,7 +16,7 @@ class employeeModel {
       this.rating,
       this.age});
 
-  employeeModel.fromJson(Map<String, dynamic> json) {
+  EmployeeModel.fromJson(Map<String, dynamic> json) {
     className = json['className'];
     objectId = json['objectId'];
     createdAt = json['createdAt'];
@@ -26,15 +26,15 @@ class employeeModel {
     age = json['age'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['className'] = this.className;
-    data['objectId'] = this.objectId;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['name'] = this.name;
-    data['rating'] = this.rating;
-    data['age'] = this.age;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['className'] = this.className;
+  //   data['objectId'] = this.objectId;
+  //   data['createdAt'] = this.createdAt;
+  //   data['updatedAt'] = this.updatedAt;
+  //   data['name'] = this.name;
+  //   data['rating'] = this.rating;
+  //   data['age'] = this.age;
+  //   return data;
+  // }
 }

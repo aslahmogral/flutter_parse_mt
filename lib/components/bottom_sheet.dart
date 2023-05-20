@@ -13,12 +13,12 @@ class WBottomSheet extends StatelessWidget {
         BoxShadow(
           spreadRadius: 1.0,
           blurRadius: 8.0,
-          offset: Offset(0, -3.0),
+          offset: const Offset(0, -3.0),
           color: WColors.brightColor.withOpacity(0.6),
         )
       ],
       color: WColors.dimWhiteColor,
-      borderRadius: BorderRadius.only(
+      borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(Dimens.padding_3xl),
           topRight: Radius.circular(Dimens.padding_3xl)),
     );
@@ -26,7 +26,7 @@ class WBottomSheet extends StatelessWidget {
       decoration: decoration,
       width: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: EdgeInsets.all(Dimens.padding_xl),
+        padding: const EdgeInsets.all(Dimens.paddingXl),
         child: child,
       ),
     );

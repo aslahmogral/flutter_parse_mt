@@ -6,7 +6,6 @@ import 'package:flutter_parse/services/service_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,10 +14,12 @@ void main() async {
       ServiceHelper.keyApplicationId, ServiceHelper.keyParseServerUrl,
       clientKey: ServiceHelper.keyClientKey, debug: true);
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   
   @override
   Widget build(BuildContext context) {
@@ -32,21 +33,17 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Flutter SignUp',
+        title: 'Flutter Parse mt',
         theme: ThemeData(
           fontFamily: GoogleFonts.poppins().fontFamily,
           colorScheme: ColorScheme.fromSwatch().copyWith(
             primary: const Color(0xff9170e2),
           ),
         ),
-        home: SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
 
-  Future<bool?> shared() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final check = await prefs.getBool('logged');
-    return check;
-  }
+  
 }

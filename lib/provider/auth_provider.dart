@@ -17,22 +17,17 @@ class AuthProvider with ChangeNotifier {
     try {
       
       if (response.success!) {
-        print('---------------sucees------------');
         _isLoggedIn = true;
         notifyListeners();
         return response;
       } else {
-        print('-----------error------sdfgsdf----${response.error}============');
         _isLoggedIn = false;
-        print('error');
         notifyListeners();
         return response;
 
       }
     } catch (e) {
-      print('-----------exception-----');
       _isLoggedIn = false;
-      print('error: $e');
       notifyListeners();
         return response;
       
@@ -48,12 +43,10 @@ class AuthProvider with ChangeNotifier {
         notifyListeners();
       } else {
         _isLoggedIn = true;
-        print('error');
         notifyListeners();
       }
     } catch (e) {
       _isLoggedIn = true;
-      print('error: $e');
       notifyListeners();
     }
   }

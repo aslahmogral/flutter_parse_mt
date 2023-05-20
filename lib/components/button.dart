@@ -17,17 +17,17 @@ class FButton extends StatefulWidget {
       required this.gradient});
 
   @override
-  State<FButton> createState() => W_ButtonState();
+  State<FButton> createState() => FButtonState();
 }
 
-class W_ButtonState extends State<FButton> {
+class FButtonState extends State<FButton> {
   var offsetBoxShadow = [
-    BoxShadow(
+    const BoxShadow(
       offset: Offset(-8.0, -8.0),
       color: WColors.brightColor,
       blurRadius: 10.0,
     ),
-    BoxShadow(
+    const BoxShadow(
       offset: Offset(8.0, 8.0),
       color: WColors.darkColor,
       blurRadius: 10.0,
@@ -44,9 +44,10 @@ class W_ButtonState extends State<FButton> {
               : widget.buttonColor ?? WColors.primaryColor,
           borderRadius: BorderRadius.circular(20)),
       child: Material(
+        color: Colors.transparent,
         child: InkWell(
             onTap: widget.onPressed,
-            child: Container(
+            child: SizedBox(
               height: 60,
               width: MediaQuery.of(context).size.width,
               child: Center(
@@ -57,7 +58,6 @@ class W_ButtonState extends State<FButton> {
                 ),
               ),
             )),
-        color: Colors.transparent,
       ),
     );
   }

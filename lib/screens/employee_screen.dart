@@ -12,7 +12,6 @@ import 'package:flutter_parse/utils/constants.dart';
 import 'package:flutter_parse/utils/dimens.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EmployeeScreen extends StatefulWidget {
   const EmployeeScreen({super.key});
@@ -30,13 +29,13 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   ValueNotifier<bool> isEmployeeSaveNotifier = ValueNotifier(false);
   final _formKey = GlobalKey<FormState>();
 
-  Future<List<employeeModel>> employeeListMethod() async {
-    List<employeeModel> employeeList = [];
+  Future<List<EmployeeModel>> employeeListMethod() async {
+    List<EmployeeModel> employeeList = [];
 
     final employeeProvider =
-        await Provider.of<EmployeeProvider>(context, listen: false);
+        Provider.of<EmployeeProvider>(context, listen: false);
     await employeeProvider.getEmployee();
-    employeeList = await employeeProvider.employeeList;
+    employeeList = employeeProvider.employeeList;
     return employeeList;
   }
 
@@ -55,64 +54,65 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(Constants.enter_employee_details,
+                  const Text(Constants.enterEmployeeDetails,
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(
+                  const SizedBox(
                     height: Dimens.padding_3xl,
                   ),
                   WTextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return Constants.employee_empty;
+                        return Constants.emptyEmployee;
                       }
                       return null;
                     },
-                    label: Constants.enter_employee_name,
+                    label: Constants.enterEmployeeName,
                     textEditingController: _nameController,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: Dimens.padding,
                   ),
                   WTextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return Constants.enter_employee_name;
+                        return Constants.enterEmployeeName;
                       }
                       return null;
                     },
                     textInputType: TextInputType.number,
-                    label: Constants.enter_employee_age,
+                    label: Constants.enterEmployeeAge,
                     textEditingController: ageController,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: Dimens.padding,
                   ),
                   WTextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return Constants.enter_rating;
+                        return Constants.enterRating;
                       } else if (int.parse(value) > 100) {
-                        return Constants.rating_warning;
+                        return Constants.ratingWarning;
                       }
                       return null;
                     },
                     textInputType: TextInputType.number,
-                    label: Constants.enter_rating,
+                    label: Constants.enterRating,
                     textEditingController: ratingController,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: Dimens.padding,
                   ),
-                   ValueListenableBuilder(
-                    valueListenable: isEmployeeSaveNotifier,
-                     builder: (context,isEmployeeSaved,child) {
-                       return isEmployeeSaved ? CircularProgressIndicator(): FButton(
-                        onPressed: onPressed,
-                        label: Constants.add_employee,
-                        gradient: true,
-                  );
-                     }
-                   )
+                  ValueListenableBuilder(
+                      valueListenable: isEmployeeSaveNotifier,
+                      builder: (context, isEmployeeSaved, child) {
+                        return isEmployeeSaved
+                            ? const CircularProgressIndicator()
+                            : FButton(
+                                onPressed: onPressed,
+                                label: Constants.addEmployee,
+                                gradient: true,
+                              );
+                      })
                 ],
               ),
             ),
@@ -140,28 +140,27 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     }
   }
 
-  FutureBuilder<List<employeeModel>> employeeListView(
+  FutureBuilder<List<EmployeeModel>> employeeListView(
       EmployeeProvider employeeProvider) {
-    return FutureBuilder<List<employeeModel>>(
+    return FutureBuilder<List<EmployeeModel>>(
       future: employeeListMethod(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Center(
-              child: Container(
-                  child: LoaderBird(
-                message1: Constants.loading_data,
-              )),
+            return const Center(
+              child: LoaderBird(
+                message1: Constants.loadingData,
+              ),
             );
 
           default:
             if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text("error..."),
               );
             } else if (!snapshot.hasData) {
-              return Center(
+              return const Center(
                 child: Text("error..."),
               );
             } else {
@@ -180,9 +179,9 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     child: Card(
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.borderRadius_small)),
+                              BorderRadius.circular(Dimens.borderRadiusSmall)),
                       elevation: 6,
-                      margin: const EdgeInsets.all(Dimens.Padding_xs),
+                      margin: const EdgeInsets.all(Dimens.paddingXs),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
@@ -191,9 +190,9 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                               radius: 28,
                               progressColor: progressColor(employeeRating),
                               center: Text(
-                                '${employeeRating}%',
-                                style:
-                                    TextStyle(fontSize: Dimens.Padding_small),
+                                '$employeeRating%',
+                                style: const TextStyle(
+                                    fontSize: Dimens.paddingSmall),
                               ),
                             ),
                             title: Text(employeeName!),
@@ -206,7 +205,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                                   });
                                   // print(employeeId);
                                 },
-                                icon: Icon(Icons.delete))),
+                                icon: const Icon(Icons.delete))),
                       ),
                     ),
                   );
@@ -246,7 +245,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
           (route) => false);
     } else {
       isSignOutLoadingNotifier.value = false;
@@ -255,109 +254,109 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final employeeProvider =
         Provider.of<EmployeeProvider>(context, listen: false);
 
-    return Container(
-      decoration: BoxDecoration(gradient: FTheme.primaryGradient),
-      child: ValueListenableBuilder(
-          valueListenable: isLoadingNotifier,
-          builder: (context, isLoading, child) {
-            return 
-                  Scaffold(
-                    backgroundColor: Colors.transparent,
-                    resizeToAvoidBottomInset: true,
-                    appBar: AppBar(
-                      elevation: 0.0,
-                      backgroundColor: Colors.transparent,
-                      title: Text(Constants.employees),
-                      centerTitle: true,
-                      actions: [
-                        IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  backgroundColor: Colors.transparent,
-                                  content: ValueListenableBuilder(
-                                      valueListenable: isSignOutLoadingNotifier,
-                                      builder: (context, isSignout, child) {
-                                        return Container(
-                                          decoration: FTheme.dialogDecoration,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(
-                                                Dimens.padding_2xl),
-                                            child: isSignout
-                                                ? Container(
-                                                    height: 300,
-                                                    child: LoaderBird(
-                                                      message1:
-                                                          Constants.signing_out,
-                                                    ))
-                                                : Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(Constants
-                                                          .signing_out_warning_msg1),
-                                                      Text(Constants
-                                                          .signing_out_warning_msg2),
-                                                      SizedBox(
-                                                        height: Dimens.padding,
-                                                      ),
-                                                      FButton(
-                                                        label:
-                                                            Constants.sign_out,
-                                                        gradient: true,
-                                                        onPressed: () {
-                                                          logoutMethod(
-                                                              authProvider,
-                                                              context);
-                                                        },
-                                                      )
-                                                    ],
-                                                  ),
-                                          ),
-                                        );
-                                      }),
-                                ),
-                              );
-                              // logoutMethod(authProvider, context);
-                            },
-                            icon: Icon(Icons.logout))
-                      ],
-                    ),
-                    body: Column(
-                      // clipBehavior: Clip.none,
-                      children: [
-                        Expanded(
-                            flex: 9, child: employeeListView(employeeProvider)),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            // height: 50,
-                            color: isLoading
-                                ? WColors.brightColor
-                                : Colors.transparent,
-                          ),
-                        )
-                      ],
-                    ),
-                    floatingActionButton: FloatingActionButton.extended(
-                      label: Text(Constants.add_employee),
-                      icon: Icon(Icons.person_add),
-                      backgroundColor: Colors.black,
-                      onPressed: () {
-                        addEmployeeDialog(context, employeeProvider, () {
-                          saveEmployeeMethod(employeeProvider, context,
-                              _formKey.currentState!.validate());
-                        });
-                      },
-                    ),
-                  );
-                
-          }),
-    );
+    return Builder(builder: (context) {
+      return Container(
+        decoration: BoxDecoration(gradient: FTheme.primaryGradient),
+        child: ValueListenableBuilder(
+            valueListenable: isLoadingNotifier,
+            builder: (context, isLoading, child) {
+              return Scaffold(
+                backgroundColor: Colors.transparent,
+                resizeToAvoidBottomInset: true,
+                appBar: AppBar(
+                  elevation: 0.0,
+                  backgroundColor: Colors.transparent,
+                  title: const Text(Constants.employees),
+                  centerTitle: true,
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              content: ValueListenableBuilder(
+                                  valueListenable: isSignOutLoadingNotifier,
+                                  builder: (context, isSignout, child) {
+                                    return Consumer<AuthProvider>(builder:
+                                        (context, authProvider, child) {
+                                      return Container(
+                                        decoration: FTheme.dialogDecoration,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(
+                                              Dimens.padding_2xl),
+                                          child: isSignout
+                                              ? const SizedBox(
+                                                  height: 300,
+                                                  child: LoaderBird(
+                                                    message1:
+                                                        Constants.signingOut,
+                                                  ))
+                                              : Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    const Text(Constants
+                                                        .signOutWarningMsg1),
+                                                    const Text(Constants
+                                                        .signOutWarningMsg2),
+                                                    const SizedBox(
+                                                      height: Dimens.padding,
+                                                    ),
+                                                    FButton(
+                                                      label: Constants.signOut,
+                                                      gradient: true,
+                                                      onPressed: () {
+                                                        logoutMethod(
+                                                            authProvider,
+                                                            context);
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                        ),
+                                      );
+                                    });
+                                  }),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.logout))
+                  ],
+                ),
+                body: Column(
+                  // clipBehavior: Clip.none,
+                  children: [
+                    Expanded(
+                        flex: 9, child: employeeListView(employeeProvider)),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        // height: 50,
+                        color: isLoading
+                            ? WColors.brightColor
+                            : Colors.transparent,
+                      ),
+                    )
+                  ],
+                ),
+                floatingActionButton: FloatingActionButton.extended(
+                  label: const Text(Constants.addEmployee),
+                  icon: const Icon(Icons.person_add),
+                  backgroundColor: Colors.black,
+                  onPressed: () {
+                    addEmployeeDialog(context, employeeProvider, () {
+                      saveEmployeeMethod(employeeProvider, context,
+                          _formKey.currentState!.validate());
+                    });
+                  },
+                ),
+              );
+            }),
+      );
+    });
   }
 }

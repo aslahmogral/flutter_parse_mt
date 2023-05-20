@@ -17,7 +17,6 @@ class EmployeeServices {
       }
     } catch (e) {
 
-      print(e);
       return FResponse.error();
     }
   }
@@ -36,7 +35,6 @@ class EmployeeServices {
       return FResponse.success(success: true);
     } catch (e) {
 
-      print(e);
       return FResponse.error();
     }
   }
@@ -47,7 +45,6 @@ class EmployeeServices {
       await employee.delete();
       return FResponse.success();
     } catch (e) {
-      print(e);
       return FResponse.error();
     }
   }

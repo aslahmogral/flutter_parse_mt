@@ -10,10 +10,10 @@ class AnimationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: SizedBox()),
+        const Expanded(child: SizedBox()),
         Lottie.asset(lottie,
             fit: BoxFit.contain, height: 300),
-        Expanded(child: SizedBox())
+        const Expanded(child: SizedBox())
       ],
     );
   }

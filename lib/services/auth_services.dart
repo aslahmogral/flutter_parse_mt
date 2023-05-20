@@ -14,15 +14,12 @@ class AuthServices {
       if (response.success) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString(ServiceHelper.userLoggedInKey, 'true');
-        final check = await prefs.getString('logged');
-        print(check);
 
         return FResponse.success(data: response);
       } else {
         return FResponse.error(error: response.error!.message);
       }
     } catch (e) {
-      print(e);
       return FResponse.error(error: e.toString());
     }
   }
@@ -36,8 +33,6 @@ class AuthServices {
     if (response.success) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.remove(ServiceHelper.userLoggedInKey);
-      final check = await prefs.getString('logged');
-      print(check);
       return FResponse.success(data: response);
     } else {
 

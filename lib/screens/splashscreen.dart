@@ -18,9 +18,9 @@ class _SplashScreenState extends State<SplashScreen> {
   String? user;
   Future checkLoggedin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var _user = prefs.getString('logged');
+    var user = prefs.getString('logged');
     setState(() {
-      user = _user;
+      user = user;
     });
   }
 
@@ -28,13 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     checkLoggedin().whenComplete(() async {
       Timer(
-          Duration(seconds: 3),
+          const Duration(seconds: 3),
           () => Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => user != null
-                      ? EmployeeScreen()
-                      : LoginScreen())));
+                      ? const EmployeeScreen()
+                      : const LoginScreen())));
     });
 
     super.initState();

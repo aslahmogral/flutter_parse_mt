@@ -16,7 +16,7 @@ class LoaderBird extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               LottieBuilder.asset('animation/loader.json'),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Text(message1.toString()),

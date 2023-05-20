@@ -2,31 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_parse/model/employee_model.dart';
 import 'package:flutter_parse/services/employee_services.dart';
 
-class EmployeeProvider with ChangeNotifier{
-  List<employeeModel> _employeeList = [];
-  List<employeeModel> get employeeList => _employeeList;
-
+class EmployeeProvider with ChangeNotifier {
+  List<EmployeeModel> _employeeList = [];
+  List<EmployeeModel> get employeeList => _employeeList;
 
   getEmployee() async {
-    print('aslah : provider : getemployee');
     final response = await EmployeeServices().getEmployee();
-    print('------------------getemployee---------------------');
-    print(response.data);
-
-    print('--------------------------------');
 
     if (response.success!) {
-      print('------------------getemployee---------------------');
-      _employeeList = response.data.map<employeeModel>((item) {
-        return employeeModel(
+      _employeeList = response.data.map<EmployeeModel>((item) {
+        return EmployeeModel(
           name: item['name'] as String?,
           rating: item['rating'] as int?,
+          objectId: item['objectId'] as String?,
           age: item['age'] as int?,
         );
       }).toList();
-
-      print('///////////////////////');
-      print(employeeList.runtimeType);
 
       notifyListeners();
     }
@@ -36,7 +27,10 @@ class EmployeeProvider with ChangeNotifier{
       {required String name,
       required String age,
       required String rating}) async {
-    print('aslah : provider : getemployee');
     await EmployeeServices().saveEmployee(name: name, age: age, rating: rating);
+  }
+
+  deleteEmployee({required String id}) async {
+    await EmployeeServices().deleteEmployee(id: id);
   }
 }

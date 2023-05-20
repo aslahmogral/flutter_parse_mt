@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_parse/model/employee_model.dart';
 import 'package:flutter_parse/services/auth_services.dart';
-import 'package:flutter_parse/services/employee_services.dart';
+
+import '../utils/response.dart';
 
 class AuthProvider with ChangeNotifier {
   bool? _isLoggedIn;
 
   bool? get isLoggedIn => _isLoggedIn;
 
-  userLogin({required String adminName, required String adminPassword}) async {
-    try {
-      final response = await AuthServices().userLogin(
+  Future<FResponse> userLogin(
+      {required String adminName, required String adminPassword}) async {
+        final response = await AuthServices().userLogin(
         adminName: adminName,
         adminPassword: adminPassword,
       );
+    try {
+      
       if (response.success!) {
         _isLoggedIn = true;
         notifyListeners();
+        return response;
       } else {
         _isLoggedIn = false;
-        print('error');
         notifyListeners();
+        return response;
+
       }
     } catch (e) {
       _isLoggedIn = false;
-      print('error: $e');
       notifyListeners();
+        return response;
+      
+      
     }
   }
 
@@ -37,15 +43,11 @@ class AuthProvider with ChangeNotifier {
         notifyListeners();
       } else {
         _isLoggedIn = true;
-        print('error');
         notifyListeners();
       }
     } catch (e) {
       _isLoggedIn = true;
-      print('error: $e');
       notifyListeners();
     }
   }
-
-  
 }
